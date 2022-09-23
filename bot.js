@@ -27,9 +27,9 @@ client.on("ready", async () => {
 client.on("messageCreate", async (message) => {
   const only4ofAkind = isDevMode ? message.author.username === "4ofAkind" : true;
 
-  if (!only4ofAkind) {
-    return;
-  }
+  // if (!only4ofAkind) {
+  //   return;
+  // }
 
   if (message.author.bot) {
     return;
