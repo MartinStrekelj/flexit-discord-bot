@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
-import bot from "./bot.js";
+import FlexitBot from "./bot.js";
 
 const app = express();
 
@@ -10,6 +10,7 @@ const port = process.env.PORT || 3001;
 app.get("/", (req, res) => res.type("html").send(html));
 
 app.listen(port, () => {
+  FlexitBot.client.login(process.env.DISCORD_TOKEN);
   console.log(`Example app listening on port ${port}!`);
 });
 

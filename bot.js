@@ -1,9 +1,10 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import { Client, EmbedBuilder, GatewayIntentBits } from "discord.js";
-import selectRandomFlexitGif from "./src/random-flexit-gif.js";
+import { Client, GatewayIntentBits } from "discord.js";
 import anonimniName from "./src/anonimni-name.js";
+import botChatCommands from "./src/bot-chat-commands.js";
+import flexitListener from "./src/flexit-listener.js";
 
 const isDevMode = process.env.NODE_ENV === "dev";
 
@@ -19,36 +20,31 @@ const client = new Client({
   ],
 });
 
-client.login(process.env.DISCORD_TOKEN);
-
 client.on("ready", async () => {
   console.log("Bot ready!");
 });
 
 client.on("messageCreate", async (message) => {
-  console.log("Message intercepted!");
+  const only4ofAkind = isDevMode ? message.author.username === "4ofAkind" : true;
+
+  if (!only4ofAkind) {
+    return;
+  }
+
   if (message.author.bot) {
     return;
   }
 
-  const hasMentionedFlexit = message.mentions.roles.some((mentioned_role) => mentioned_role.name.includes("League"));
-  const only4ofAkind = isDevMode ? message.author.username === "4ofAkind" : true;
+  console.log(`Message intercepted: ${JSON.stringify(message.author.username)} -> ${JSON.stringify(message.content)}`);
 
-  if (only4ofAkind && hasMentionedFlexit) {
-    const gif = selectRandomFlexitGif.execute();
-    const response = new EmbedBuilder().setTitle("FLEXIT").setImage(gif);
-    message.channel.send({ embeds: [response] });
+  flexitListener.execute(message);
+
+  if (!botChatCommands.isKnownCommand(message.content)) {
+    return;
   }
 
-  if (message.content === "*name random") {
-    const guild = client.guilds.cache.find((guild) => guild.id === message.guildId);
-    if (!guild) return;
-
-    const member = guild.members.cache.find((member) => member.id === message.author.id);
-    if (!member) return;
-
-    await anonimniName.execute(member, true);
-  }
+  const command = message.content;
+  botChatCommands.execute(command, message, client);
 });
 
 client.on("guildMemberAdd", async (member) => {

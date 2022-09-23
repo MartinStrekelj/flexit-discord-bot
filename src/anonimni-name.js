@@ -13,7 +13,6 @@ const json = JSON.parse(fs.readFileSync(NICKNAMES_PATH, "utf8"));
 const ANONIMNI = "Anonimni";
 
 const changeName = async (member, force = false) => {
-  console.log({ member });
   if (!force && isAnonimni(member.displayName)) {
     return;
   }
@@ -42,4 +41,18 @@ const isNicknameUnique = (name, discordServer) => {
 
 const isAnonimni = (name) => name.includes(ANONIMNI);
 
-export default { execute: changeName };
+const handler = async (_messageObj, client) => {
+  try {
+    const guild = client.guilds.cache.find((guild) => guild.id === _messageObj.guildId);
+    if (!guild) return;
+
+    const member = guild.members.cache.find((member) => member.id === _messageObj.author.id);
+    if (!member) return;
+
+    await changeName(member, true);
+  } catch (e) {
+    console.error(e.message);
+  }
+};
+
+export default { execute: changeName, commandExecute: handler };
