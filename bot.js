@@ -19,6 +19,8 @@ const client = new Client({
   ],
 });
 
+client.login(process.env.DISCORD_TOKEN);
+
 client.on("ready", async () => {
   console.log("Bot ready!");
 });
