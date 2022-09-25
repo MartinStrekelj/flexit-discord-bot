@@ -18,7 +18,7 @@ const COMMANDS = {
   JOKE: "*joke",
   JOKE_CHUCK: "*joke chuck",
   JOKE_YO_MAMA: "*joke yomama",
-  JOKE_DAD: "*joke dad",
+  // JOKE_DAD: "*joke dad",
   EXCUSE: "*excuse",
   MEME: "*meme",
   FACT: "*fact",
@@ -45,7 +45,7 @@ const HANDLERS = {
 };
 
 async function randomJoke(messageObj, client) {
-  const jokeCategory = draw([chuckNorrisJoke, yoMamaJoke, dadJoke]);
+  const jokeCategory = draw([chuckNorrisJoke, yoMamaJoke]);
   await jokeCategory.execute(messageObj, client);
 }
 
