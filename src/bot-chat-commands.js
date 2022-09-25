@@ -9,6 +9,8 @@ import help from "./commands/help.js";
 import fact from "./commands/fact.js";
 import topShows from "./commands/top-shows.js";
 import quote from "./commands/quote.js";
+import advice from "./commands/advice.js";
+import dadJoke from "./commands/dad-joke.js";
 
 const COMMANDS = {
   STATUS: "*status",
@@ -16,12 +18,14 @@ const COMMANDS = {
   JOKE: "*joke",
   JOKE_CHUCK: "*joke chuck",
   JOKE_YO_MAMA: "*joke yomama",
+  JOKE_DAD: "*joke dad",
   EXCUSE: "*excuse",
   MEME: "*meme",
   FACT: "*fact",
   TOP_SHOWS: "*tv-shows",
   QUOTE: "*quote",
   HELP: "*help",
+  ADVICE: "*advice",
 };
 
 const HANDLERS = {
@@ -32,14 +36,16 @@ const HANDLERS = {
   [COMMANDS.MEME]: randomMeme.execute,
   [COMMANDS.JOKE_CHUCK]: chuckNorrisJoke.execute,
   [COMMANDS.JOKE_YO_MAMA]: yoMamaJoke.execute,
+  [COMMANDS.JOKE_DAD]: dadJoke.execute,
   [COMMANDS.HELP]: (messageObj, _client) => help.execute(messageObj, COMMANDS),
   [COMMANDS.FACT]: fact.execute,
   [COMMANDS.TOP_SHOWS]: topShows.execute,
+  [COMMANDS.ADVICE]: advice.execute,
   [COMMANDS.QUOTE]: quote.execute,
 };
 
 async function randomJoke(messageObj, client) {
-  const jokeCategory = draw([chuckNorrisJoke, yoMamaJoke]);
+  const jokeCategory = draw([chuckNorrisJoke, yoMamaJoke, dadJoke]);
   await jokeCategory.execute(messageObj, client);
 }
 
